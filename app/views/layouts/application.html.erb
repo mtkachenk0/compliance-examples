@@ -10,8 +10,12 @@
   </head>
 
   <body>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
+    <%- flash.each do |key, value| %>
+      <%- next if value.blank? %>
+      <%= content_tag(:div, class: "alert alert-#{key == "notice" ? "info" : "danger"}") do %>
+        <%= value %>
+      <% end %>
+    <% end %>
     <%= yield %>
   </body>
 </html>
