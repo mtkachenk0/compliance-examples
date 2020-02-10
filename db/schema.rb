@@ -10,10 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_07_121737) do
+ActiveRecord::Schema.define(version: 2020_02_10_110544) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "accounts", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "name", null: false
+    t.string "currency", null: false
+    t.string "iban"
+    t.jsonb "extra", default: {}
+    t.string "cash_account_type"
+    t.string "product"
+    t.string "bban"
+    t.string "bic"
+    t.string "msisdn"
+    t.string "status", default: "enabled"
+    t.jsonb "balances"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_accounts_on_user_id"
+  end
 
   create_table "tokens", force: :cascade do |t|
     t.string "token", null: false
@@ -26,6 +44,23 @@ ActiveRecord::Schema.define(version: 2020_02_07_121737) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_tokens_on_user_id"
+  end
+
+  create_table "transactions", force: :cascade do |t|
+    t.bigint "account_id"
+    t.float "amount"
+    t.string "currency"
+    t.string "status", default: "pending"
+    t.date "value_date"
+    t.date "booking_date"
+    t.jsonb "creditor_details"
+    t.jsonb "debtor_details"
+    t.jsonb "remittance_information", default: {}
+    t.jsonb "currency_exchange", default: []
+    t.jsonb "extra", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_transactions_on_account_id"
   end
 
   create_table "users", force: :cascade do |t|
